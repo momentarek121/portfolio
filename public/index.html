@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Momen Tarek — Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0A0A;
+  --surface: #111111;
+  --surface2: #181818;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #F0EDE8;
+  --muted: #6B6760;
+  --accent: #C8F04D;
+  --accent2: #FF6B35;
+  --font-en-display: 'Syne', sans-serif;
+  --font-en-body: 'DM Sans', sans-serif;
+  --font-ar: 'Cairo', sans-serif;
+  --font-display: var(--font-en-display);
+  --font-body: var(--font-en-body);
+  --radius: 4px;
+}
+
+[lang="ar"] {
+  --font-display: var(--font-ar);
+  --font-body: var(--font-ar);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: none;
+  transition: font-family 0.2s;
+}
+
+[lang="ar"] body, [lang="ar"] * {
+  font-family: var(--font-ar) !important;
+}
+
+/* CURSOR */
+.cursor { width:10px;height:10px;background:var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transition:transform .15s,width .2s,height .2s,background .2s;transform:translate(-50%,-50%); }
+.cursor-ring { width:36px;height:36px;border:1px solid rgba(200,240,77,0.4);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:transform .08s,width .25s,height .25s;transform:translate(-50%,-50%); }
+.cursor.h { width:6px;height:6px;background:var(--accent2); }
+.cursor-ring.h { width:52px;height:52px;border-color:rgba(255,107,53,0.5); }
+
+/* NOISE */
+body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.35; }
+
+/* NAV */
+nav {
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 48px;
+  background:linear-gradient(to bottom,rgba(10,10,10,0.95),transparent);
+}
+.nav-logo { font-family:var(--font-en-display);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--text);text-decoration:none; }
+.nav-logo span { color:var(--accent); }
+.nav-right { display:flex;align-items:center;gap:32px; }
+.nav-links { display:flex;gap:32px;list-style:none; }
+.nav-links a { font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s; }
+[lang="ar"] .nav-links a { letter-spacing:0;text-transform:none;font-size:13px; }
+.nav-links a:hover { color:var(--text); }
+
+/* LANG TOGGLE */
+.lang-toggle {
+  display:flex;align-items:center;gap:0;
+  border:1px solid var(--border2);
+  border-radius:100px;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.lang-btn {
+  font-size:11px;font-weight:500;letter-spacing:.08em;
+  padding:7px 14px;
+  background:none;border:none;
+  color:var(--muted);cursor:pointer;
+  transition:all .2s;
+  font-family:var(--font-en-body);
+}
+.lang-btn.active { background:var(--accent);color:#0A0A0A; }
+
+/* HERO */
+.hero { min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 48px 80px;position:relative;overflow:hidden; }
+.hero-bg { position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 80% 20%,rgba(200,240,77,.06) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 10% 80%,rgba(255,107,53,.05) 0%,transparent 50%); }
+.hero-line { position:absolute;top:0;width:1px;height:100%;background:linear-gradient(to bottom,transparent,var(--border2) 30%,var(--border) 70%,transparent); }
+[dir="ltr"] .hero-line { left:48px; }
+[dir="rtl"] .hero-line { right:48px; }
+
+.hero-tag { font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;display:flex;align-items:center;gap:12px; }
+[lang="ar"] .hero-tag { letter-spacing:0;font-size:12px; }
+.hero-tag::before { content:'';display:block;width:32px;height:1px;background:var(--accent); }
+
+.hero-title { font-family:var(--font-display);font-weight:800;font-size:clamp(52px,9vw,130px);line-height:.92;letter-spacing:-.02em;margin-bottom:40px; }
+[lang="ar"] .hero-title { letter-spacing:0;line-height:1.1; }
+.hero-title em { font-style:italic;font-weight:400;color:var(--muted); }
+[lang="ar"] .hero-title em { font-style:normal;font-weight:300; }
+.hero-title .aw { color:var(--accent); }
+
+.hero-bottom { display:flex;justify-content:space-between;align-items:flex-end; }
+.hero-desc { max-width:340px;font-size:14px;color:var(--muted);line-height:1.8; }
+[lang="ar"] .hero-desc { font-size:15px; }
+
+.hero-stats { display:flex;gap:48px; }
+.stat { text-align:right; }
+[dir="rtl"] .stat { text-align:left; }
+.stat-num { font-family:var(--font-en-display);font-size:32px;font-weight:700;color:var(--text);line-height:1; }
+.stat-label { font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px; }
+[lang="ar"] .stat-label { letter-spacing:0;font-size:12px; }
+
+.hero-scroll { display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted); }
+[lang="ar"] .hero-scroll { letter-spacing:0;font-size:12px; }
+.scroll-line { width:1px;height:48px;background:linear-gradient(to bottom,var(--muted),transparent);animation:sp 2s ease-in-out infinite; }
+@keyframes sp { 0%,100%{opacity:.4;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.2)} }
+
+/* TICKER */
+.about-strip { border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:22px 0;overflow:hidden; }
+.about-strip-inner { display:flex;gap:48px;white-space:nowrap;animation:tick 22s linear infinite; }
+[dir="rtl"] .about-strip-inner { animation:tick-rtl 22s linear infinite; }
+@keyframes tick { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+@keyframes tick-rtl { 0%{transform:translateX(0)} 100%{transform:translateX(50%)} }
+.strip-item { display:flex;align-items:center;gap:16px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted); }
+[lang="ar"] .strip-item { letter-spacing:0;font-size:13px;text-transform:none; }
+.strip-dot { width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0; }
+
+/* SECTIONS */
+section { padding:100px 48px; }
+.section-header { display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:64px; }
+.section-label { font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:12px; }
+[lang="ar"] .section-label { letter-spacing:0;font-size:12px;text-transform:none; }
+.section-title { font-family:var(--font-display);font-size:clamp(32px,4vw,52px);font-weight:700;line-height:1.1; }
+.section-cta { font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border2);padding-bottom:4px;transition:color .2s,border-color .2s; }
+[lang="ar"] .section-cta { letter-spacing:0;font-size:13px; }
+.section-cta:hover { color:var(--text);border-color:var(--text); }
+
+/* FILTER TABS */
+.filter-tabs { display:flex;gap:8px;margin-bottom:48px;flex-wrap:wrap; }
+.tab { font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 18px;border:1px solid var(--border);border-radius:100px;cursor:pointer;transition:all .2s;background:none;font-family:var(--font-body); }
+[lang="ar"] .tab { letter-spacing:0;font-size:13px;text-transform:none; }
+.tab:hover { border-color:var(--border2);color:var(--text); }
+.tab.active { background:var(--accent);color:#0A0A0A;border-color:var(--accent);font-weight:500; }
+
+/* WORKS GRID */
+.works-grid { display:grid;grid-template-columns:repeat(12,1fr);gap:16px; }
+.work-item { position:relative;overflow:hidden;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:border-color .3s; }
+.work-item:hover { border-color:var(--border2); }
+.work-item.wide { grid-column:span 7; }
+.work-item.narrow { grid-column:span 5; }
+.work-item.full { grid-column:span 12; }
+.work-item.third { grid-column:span 4; }
+
+.work-thumb { width:100%;aspect-ratio:4/3;overflow:hidden;position:relative; }
+.work-item.wide .work-thumb { aspect-ratio:16/9; }
+.work-item.full .work-thumb { aspect-ratio:21/7; }
+.work-thumb-inner { width:100%;height:100%;transition:transform .6s cubic-bezier(.25,.46,.45,.94);position:relative; }
+.work-item:hover .work-thumb-inner { transform:scale(1.04); }
+
+/* user-uploaded image support */
+.work-thumb-inner img { width:100%;height:100%;object-fit:cover;display:block; }
+
+.thumb-art { width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-en-display);font-size:clamp(14px,2vw,22px);font-weight:700;letter-spacing:.06em;position:relative;overflow:hidden; }
+.art-grid { position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:40px 40px; }
+.art-shape { position:absolute;border-radius:50%;opacity:.15; }
+.art-text { position:relative;z-index:2;text-align:center; }
+.art-text small { display:block;font-size:.45em;font-weight:400;opacity:.7;letter-spacing:.2em;margin-top:4px;text-transform:uppercase; }
+.ta-1{background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)} .ta-1 .art-text{color:#e94560}
+.ta-2{background:linear-gradient(160deg,#0d0d0d,#1a1a1a,#2d1b00)} .ta-2 .art-text{color:var(--accent2)}
+.ta-3{background:linear-gradient(110deg,#050505,#0a1628)} .ta-3 .art-text{color:#4fc3f7}
+.ta-4{background:linear-gradient(145deg,#0f0f0f,#1a0a2e)} .ta-4 .art-text{color:#b39ddb}
+.ta-5{background:linear-gradient(120deg,#0a1a0a,#1a2e1a)} .ta-5 .art-text{color:var(--accent)}
+.ta-6{background:linear-gradient(155deg,#1a0a0a,#2e1a0a)} .ta-6 .art-text{color:#ffab91}
+
+.work-overlay { position:absolute;inset:0;background:rgba(10,10,10,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;backdrop-filter:blur(4px); }
+.work-item:hover .work-overlay { opacity:1; }
+.overlay-label { font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px; }
+[lang="ar"] .overlay-label { letter-spacing:0;font-size:12px;text-transform:none; }
+.overlay-title { font-family:var(--font-display);font-size:20px;font-weight:700;text-align:center;padding:0 20px; }
+
+.work-info { padding:20px 24px 22px;display:flex;justify-content:space-between;align-items:flex-start; }
+.work-title { font-family:var(--font-display);font-size:15px;font-weight:600;margin-bottom:4px; }
+.work-meta { font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted); }
+[lang="ar"] .work-meta { letter-spacing:0;font-size:12px;text-transform:none; }
+.work-arrow { width:32px;height:32px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s;flex-shrink:0;font-size:14px; }
+.work-item:hover .work-arrow { background:var(--accent);border-color:var(--accent);color:#0A0A0A; }
+
+/* UPLOAD */
+.upload-section { padding:0 48px 100px; }
+.upload-zone { border:1px dashed var(--border2);border-radius:8px;padding:60px 40px;text-align:center;transition:all .3s;position:relative;background:var(--surface); }
+.upload-zone:hover,.upload-zone.dragover { border-color:var(--accent);background:rgba(200,240,77,.03); }
+.upload-icon { width:56px;height:56px;border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:22px;color:var(--muted);transition:all .3s; }
+.upload-zone:hover .upload-icon { border-color:var(--accent);color:var(--accent); }
+.upload-title { font-family:var(--font-display);font-size:20px;font-weight:600;margin-bottom:8px; }
+.upload-sub { font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7; }
+.upload-btn { display:inline-block;background:var(--accent);color:#0A0A0A;font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:12px 28px;border-radius:2px;cursor:pointer;border:none;transition:opacity .2s; }
+[lang="ar"] .upload-btn { letter-spacing:0;font-size:13px;text-transform:none; }
+.upload-btn:hover { opacity:.85; }
+#file-input { display:none; }
+.uploaded-preview { display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:24px; }
+.preview-item { aspect-ratio:1;border-radius:4px;overflow:hidden;position:relative;border:1px solid var(--border); }
+.preview-item img { width:100%;height:100%;object-fit:cover; }
+.preview-remove { position:absolute;top:6px;right:6px;width:22px;height:22px;background:rgba(10,10,10,.8);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text);font-size:12px;cursor:pointer;border:none;opacity:0;transition:opacity .2s; }
+.preview-item:hover .preview-remove { opacity:1; }
+
+/* ADD TO GRID btn */
+.add-to-portfolio {
+  display:inline-block;margin-top:16px;
+  background:none;border:1px solid var(--border2);
+  color:var(--muted);font-family:var(--font-body);
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  padding:10px 22px;border-radius:2px;cursor:pointer;transition:all .2s;
+}
+[lang="ar"] .add-to-portfolio { letter-spacing:0;font-size:13px;text-transform:none; }
+.add-to-portfolio:hover { border-color:var(--accent);color:var(--accent); }
+
+/* SERVICES */
+.services-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--border);border-radius:4px;overflow:hidden; }
+.service-item { background:var(--surface);padding:40px 36px;border-right:1px solid var(--border);transition:background .3s; }
+[dir="rtl"] .service-item { border-right:none;border-left:1px solid var(--border); }
+.service-item:last-child { border:none; }
+.service-item:hover { background:var(--surface2); }
+.service-num { font-family:var(--font-en-display);font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--accent);margin-bottom:20px; }
+.service-title { font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:12px; }
+.service-desc { font-size:13px;color:var(--muted);line-height:1.8; }
+[lang="ar"] .service-desc { font-size:14px; }
+
+/* CONTACT */
+.contact-section { background:var(--surface);border-top:1px solid var(--border);padding:120px 48px;text-align:center;position:relative;overflow:hidden; }
+.contact-bg { position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 50% 120%,rgba(200,240,77,.06) 0%,transparent 60%); }
+.contact-title { font-family:var(--font-display);font-size:clamp(40px,7vw,96px);font-weight:800;line-height:1;margin-bottom:32px; }
+.contact-title span { color:var(--accent); }
+.contact-sub { font-size:15px;color:var(--muted);max-width:400px;margin:0 auto 40px;line-height:1.8; }
+.contact-links { display:flex;gap:16px;justify-content:center;flex-wrap:wrap; }
+.contact-link { display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border:1px solid var(--border2);border-radius:2px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--text);text-decoration:none;transition:all .25s; }
+[lang="ar"] .contact-link { letter-spacing:0;font-size:13px;text-transform:none; }
+.contact-link:hover { background:var(--accent);color:#0A0A0A;border-color:var(--accent); }
+.contact-link.primary { background:var(--accent);color:#0A0A0A;border-color:var(--accent); }
+.contact-link.primary:hover { opacity:.85; }
+
+/* FOOTER */
+footer { padding:28px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center; }
+.footer-copy { font-size:12px;color:var(--muted); }
+.footer-name { font-family:var(--font-en-display);font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--muted); }
+
+/* ANIMATIONS */
+.fade-in { opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease; }
+.fade-in.visible { opacity:1;transform:translateY(0); }
+
+/* MOBILE */
+@media(max-width:768px){
+  nav { padding:20px 24px; }
+  .nav-links { display:none; }
+  .hero { padding:0 24px 60px; }
+  .hero-title { font-size:48px; }
+  .hero-stats { gap:24px; }
+  .stat-num { font-size:24px; }
+  section,.upload-section { padding:64px 24px; }
+  .section-header { flex-direction:column;align-items:flex-start;gap:16px; }
+  .work-item.wide,.work-item.narrow,.work-item.full,.work-item.third { grid-column:span 12; }
+  .services-grid { grid-template-columns:1fr; }
+  .service-item { border-right:none !important;border-left:none !important;border-bottom:1px solid var(--border); }
+  .service-item:last-child { border-bottom:none; }
+  .contact-section { padding:80px 24px; }
+  footer { padding:24px;flex-direction:column;gap:12px;text-align:center; }
+  .hero-bottom { flex-direction:column;gap:32px;align-items:flex-start; }
+  body { cursor:auto; }
+  .cursor,.cursor-ring { display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">MT<span>.</span></a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#work" data-en="Work" data-ar="أعمالي">Work</a></li>
+      <li><a href="#services" data-en="Services" data-ar="خدماتي">Services</a></li>
+      <li><a href="#contact" data-en="Contact" data-ar="تواصل">Contact</a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">ع</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-tag" data-en="Available for projects · 2025" data-ar="متاح للمشاريع · 2025">Available for projects · 2025</div>
+  <h1 class="hero-title">
+    <span data-en="Momen" data-ar="مؤمن">Momen</span><br>
+    <em data-en="Tarek" data-ar="طارق">Tarek</em><br>
+    <span class="aw" data-en="Designer." data-ar="مصمم.">Designer.</span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc" data-en="Brand Identity · UI/UX · Social Media<br>Creating visual experiences that connect brands with people." data-ar="هوية بصرية · تجربة المستخدم · سوشيال ميديا<br>بصمم تجارب بصرية تربط البراندات بالناس.">
+      Brand Identity · UI/UX · Social Media<br>Creating visual experiences that connect brands with people.
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">5+</div>
+        <div class="stat-label" data-en="Years" data-ar="سنوات">Years</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">50+</div>
+        <div class="stat-label" data-en="Projects" data-ar="مشروع">Projects</div>
+      </div>
+      <div class="stat">
+        <div class="hero-scroll">
+          <div class="scroll-line"></div>
+          <span data-en="Scroll" data-ar="اسحب">Scroll</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="about-strip">
+  <div class="about-strip-inner" id="ticker-inner">
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Brand Identity" data-ar="هوية بصرية">Brand Identity</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="UI/UX Design" data-ar="تصميم تجربة المستخدم">UI/UX Design</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Social Media" data-ar="سوشيال ميديا">Social Media</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Visual Design" data-ar="تصميم بصري">Visual Design</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Art Direction" data-ar="إخراج فني">Art Direction</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Figma" data-ar="فيجما">Figma</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Brand Identity" data-ar="هوية بصرية">Brand Identity</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="UI/UX Design" data-ar="تصميم تجربة المستخدم">UI/UX Design</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Social Media" data-ar="سوشيال ميديا">Social Media</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Visual Design" data-ar="تصميم بصري">Visual Design</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Art Direction" data-ar="إخراج فني">Art Direction</span></div>
+    <div class="strip-item"><span class="strip-dot"></span> <span data-en="Figma" data-ar="فيجما">Figma</span></div>
+  </div>
+</div>
+
+<!-- WORK -->
+<section id="work">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label" data-en="Selected Work" data-ar="من أعمالي">Selected Work</div>
+      <h2 class="section-title" data-en="Recent Projects" data-ar="أحدث المشاريع">Recent Projects</h2>
+    </div>
+    <a href="#" class="section-cta" data-en="View All ↗" data-ar="عرض الكل ↗">View All ↗</a>
+  </div>
+
+  <div class="filter-tabs fade-in">
+    <button class="tab active" data-filter="all" data-en="All" data-ar="الكل">All</button>
+    <button class="tab" data-filter="brand" data-en="Brand Identity" data-ar="هوية بصرية">Brand Identity</button>
+    <button class="tab" data-filter="ui" data-en="UI/UX" data-ar="UI/UX">UI/UX</button>
+    <button class="tab" data-filter="social" data-en="Social Media" data-ar="سوشيال ميديا">Social Media</button>
+  </div>
+
+  <div class="works-grid" id="works-grid">
+    <div class="work-item wide fade-in" data-cat="brand">
+      <div class="work-thumb"><div class="work-thumb-inner"><div class="thumb-art ta-1"><div class="art-grid"></div><div class="art-shape" style="width:200px;height:200px;background:#e94560;top:-60px;right:-40px;"></div><div class="art-text">NOVA BRAND<small>Identity System</small></div></div></div>
+        <div class="work-overlay"><div class="overlay-label" data-en="Brand Identity" data-ar="هوية بصرية">Brand Identity</div><div class="overlay-title" data-en="Nova Brand System" data-ar="نظام هوية نوفا">Nova Brand System</div></div></div>
+      <div class="work-info"><div><div class="work-title" data-en="Nova Brand System" data-ar="نظام هوية نوفا">Nova Brand System</div><div class="work-meta" data-en="Brand Identity · 2024" data-ar="هوية بصرية · 2024">Brand Identity · 2024</div></div><div class="work-arrow">↗</div></div>
+    </div>
+
+    <div class="work-item narrow fade-in" data-cat="ui">
+      <div class="work-thumb"><div class="work-thumb-inner"><div class="thumb-art ta-2"><div class="art-grid"></div><div class="art-shape" style="width:160px;height:160px;background:#ff6b35;bottom:-40px;left:-30px;"></div><div class="art-text">APP UI<small>Mobile Design</small></div></div></div>
+        <div class="work-overlay"><div class="overlay-label" data-en="UI/UX" data-ar="تجربة مستخدم">UI/UX</div><div class="overlay-title" data-en="E-Commerce App" data-ar="تطبيق تجارة إلكترونية">E-Commerce App</div></div></div>
+      <div class="work-info"><div><div class="work-title" data-en="E-Commerce App UI" data-ar="واجهة تطبيق تجارة">E-Commerce App UI</div><div class="work-meta" data-en="UI/UX · 2024" data-ar="UI/UX · 2024">UI/UX · 2024</div></div><div class="work-arrow">↗</div></div>
+    </div>
+
+    <div class="work-item third fade-in" data-cat="social">
+      <div class="work-thumb"><div class="work-thumb-inner"><div class="thumb-art ta-3"><div class="art-grid"></div><div class="art-text">SOCIAL<small>Campaign</small></div></div></div>
+        <div class="work-overlay"><div class="overlay-label" data-en="Social Media" data-ar="سوشيال ميديا">Social Media</div><div class="overlay-title" data-en="Campaign Series" data-ar="سلسلة حملات">Campaign Series</div></div></div>
+      <div class="work-info"><div><div class="work-title" data-en="Campaign Series" data-ar="سلسلة حملات">Campaign Series</div><div class="work-meta" data-en="Social Media · 2024" data-ar="سوشيال ميديا · 2024">Social Media · 2024</div></div><div class="work-arrow">↗</div></div>
+    </div>
+
+    <div class="work-item third fade-in" data-cat="brand">
+      <div class="work-thumb"><div class="work-thumb-inner"><div class="thumb-art ta-4"><div class="art-grid"></div><div class="art-text">LOGO<small>Branding</small></div></div></div>
+        <div class="work-overlay"><div class="overlay-label" data-en="Branding" data-ar="براندينج">Branding</div><div class="overlay-title" data-en="Brand Mark" data-ar="شعار براند">Brand Mark</div></div></div>
+      <div class="work-info"><div><div class="work-title" data-en="Brand Mark Design" data-ar="تصميم شعار">Brand Mark Design</div><div class="work-meta" data-en="Brand Identity · 2024" data-ar="هوية بصرية · 2024">Brand Identity · 2024</div></div><div class="work-arrow">↗</div></div>
+    </div>
+
+    <div class="work-item third fade-in" data-cat="ui">
+      <div class="work-thumb"><div class="work-thumb-inner"><div class="thumb-art ta-5"><div class="art-grid"></div><div class="art-text">DASH<small>Web Design</small></div></div></div>
+        <div class="work-overlay"><div class="overlay-label" data-en="UI/UX" data-ar="تجربة مستخدم">UI/UX</div><div class="overlay-title" data-en="Admin Dashboard" data-ar="لوحة تحكم">Admin Dashboard</div></div></div>
+      <div class="work-info"><div><div class="work-title" data-en="Admin Dashboard" data-ar="لوحة تحكم">Admin Dashboard</div><div class="work-meta" data-en="UI/UX · 2023" data-ar="UI/UX · 2023">UI/UX · 2023</div></div><div class="work-arrow">↗</div></div>
+    </div>
+
+    <div class="work-item wide fade-in" data-cat="social">
+      <div class="work-thumb"><div class="work-thumb-inner"><div class="thumb-art ta-6"><div class="art-grid"></div><div class="art-shape" style="width:240px;height:240px;background:#ff6b35;top:-80px;right:-60px;opacity:.1;"></div><div class="art-text">ADS SERIES<small>Marketing</small></div></div></div>
+        <div class="work-overlay"><div class="overlay-label" data-en="Social Media" data-ar="سوشيال ميديا">Social Media</div><div class="overlay-title" data-en="Ad Campaign Series" data-ar="سلسلة إعلانات">Ad Campaign Series</div></div></div>
+      <div class="work-info"><div><div class="work-title" data-en="Ad Campaign Series" data-ar="سلسلة إعلانات">Ad Campaign Series</div><div class="work-meta" data-en="Social Media · 2023" data-ar="سوشيال ميديا · 2023">Social Media · 2023</div></div><div class="work-arrow">↗</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- UPLOAD -->
+<div class="upload-section fade-in">
+  <div class="upload-zone" id="upload-zone">
+    <div class="upload-icon">+</div>
+    <div class="upload-title" data-en="Add Your Work" data-ar="أضف أعمالك">Add Your Work</div>
+    <p class="upload-sub" data-en="Drop your designs here or click to browse<br>JPG, PNG up to 10MB each" data-ar="اسحب تصاميمك هنا أو اضغط للاختيار<br>JPG، PNG حتى 10MB لكل ملف">Drop your designs here or click to browse<br>JPG, PNG up to 10MB each</p>
+    <button class="upload-btn" onclick="document.getElementById('file-input').click()" data-en="Upload Designs" data-ar="ارفع التصاميم">Upload Designs</button>
+    <input type="file" id="file-input" multiple accept="image/*">
+    <div class="uploaded-preview" id="uploaded-preview"></div>
+    <button class="add-to-portfolio" id="add-to-grid-btn" style="display:none" data-en="Add to Portfolio ↑" data-ar="أضف للبورتفوليو ↑">Add to Portfolio ↑</button>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label" data-en="What I Do" data-ar="ماذا أقدم">What I Do</div>
+      <h2 class="section-title" data-en="Services" data-ar="الخدمات">Services</h2>
+    </div>
+  </div>
+  <div class="services-grid fade-in">
+    <div class="service-item">
+      <div class="service-num">01</div>
+      <div class="service-title" data-en="Brand Identity" data-ar="الهوية البصرية">Brand Identity</div>
+      <p class="service-desc" data-en="Logo design, brand guidelines, visual systems, and complete identity packages that make brands unforgettable." data-ar="تصميم شعارات، دلائل البراند، الأنظمة البصرية، وباقات هوية كاملة تخلي البراند لا يُنسى.">Logo design, brand guidelines, visual systems, and complete identity packages that make brands unforgettable.</p>
+    </div>
+    <div class="service-item">
+      <div class="service-num">02</div>
+      <div class="service-title" data-en="UI/UX Design" data-ar="تصميم UI/UX">UI/UX Design</div>
+      <p class="service-desc" data-en="User research, wireframing, prototyping, and high-fidelity design for apps and web platforms using Figma." data-ar="بحث المستخدمين، wireframing، بروتوتايب، وتصميم عالي الجودة للتطبيقات والمواقع باستخدام Figma.">User research, wireframing, prototyping, and high-fidelity design for apps and web platforms using Figma.</p>
+    </div>
+    <div class="service-item">
+      <div class="service-num">03</div>
+      <div class="service-title" data-en="Social & Ads" data-ar="سوشيال وإعلانات">Social & Ads</div>
+      <p class="service-desc" data-en="Campaign design, social media templates, ad banners, and visual content that converts audiences into customers." data-ar="تصميم حملات، تمبلات سوشيال ميديا، بانرات إعلانية، ومحتوى بصري يحول المشاهدين لعملاء.">Campaign design, social media templates, ad banners, and visual content that converts audiences into customers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact">
+  <div class="contact-bg"></div>
+  <h2 class="contact-title fade-in" data-en="Let's Work<br><span>Together.</span>" data-ar="خلينا نشتغل<br><span>سوا.</span>">Let's Work<br><span>Together.</span></h2>
+  <p class="contact-sub fade-in" data-en="Have a project in mind? Let's talk about how we can bring your vision to life." data-ar="عندك مشروع في بالك؟ نتكلم عن إزاي نحول فكرتك لواقع.">Have a project in mind? Let's talk about how we can bring your vision to life.</p>
+  <div class="contact-links fade-in">
+    <a href="mailto:momen@design.com" class="contact-link primary" data-en="Get In Touch" data-ar="تواصل معي">Get In Touch</a>
+    <a href="#work" class="contact-link" data-en="See Work" data-ar="شوف الأعمال">See Work</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-copy" data-en="© 2025 Momen Tarek. All rights reserved." data-ar="© 2025 مؤمن طارق. جميع الحقوق محفوظة.">© 2025 Momen Tarek. All rights reserved.</div>
+  <div class="footer-name">ENG / MOMEN TAREK</div>
+</footer>
+
+<script>
+// ── LANG ──────────────────────────────
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const html = document.documentElement;
+  html.lang = lang;
+  html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+
+  // Update all data-en / data-ar elements
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const val = el.getAttribute('data-' + lang);
+    if (!val) return;
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = val;
+    } else if (val.includes('<')) {
+      el.innerHTML = val;
+    } else {
+      el.textContent = val;
+    }
+  });
+
+  // Save preference
+  localStorage.setItem('lang', lang);
+}
+
+// Load saved lang
+const savedLang = localStorage.getItem('lang');
+if (savedLang && savedLang !== 'en') setLang(savedLang);
+
+// ── CURSOR ────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+(function animate(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animate);
+})();
+document.querySelectorAll('a,button,.work-item,.tab,.upload-zone,.lang-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.classList.add('h');ring.classList.add('h');});
+  el.addEventListener('mouseleave',()=>{cursor.classList.remove('h');ring.classList.remove('h');});
+});
+
+// ── SCROLL ANIMATIONS ─────────────────
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*80); obs.unobserve(e.target); }
+  });
+},{threshold:.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+
+// ── FILTER TABS ───────────────────────
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const f=tab.dataset.filter;
+    document.querySelectorAll('.work-item').forEach(item=>{
+      const show=f==='all'||item.dataset.cat===f;
+      item.style.transition='opacity .3s,transform .3s';
+      item.style.opacity=show?'1':'0.15';
+      item.style.transform=show?'scale(1)':'scale(0.97)';
+    });
+  });
+});
+
+// ── UPLOAD ────────────────────────────
+const zone=document.getElementById('upload-zone');
+const input=document.getElementById('file-input');
+const previewEl=document.getElementById('uploaded-preview');
+const addBtn=document.getElementById('add-to-grid-btn');
+let pendingImages=[];
+
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover');});
+zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');handleFiles(e.dataTransfer.files);});
+input.addEventListener('change',()=>handleFiles(input.files));
+
+function handleFiles(files){
+  Array.from(files).forEach(file=>{
+    if(!file.type.startsWith('image/'))return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      pendingImages.push({src:e.target.result,name:file.name});
+      const div=document.createElement('div');
+      div.className='preview-item';
+      div.dataset.idx=pendingImages.length-1;
+      div.innerHTML=`<img src="${e.target.result}" alt="${file.name}"><button class="preview-remove" onclick="removePending(${pendingImages.length-1},this.parentElement)">✕</button>`;
+      previewEl.appendChild(div);
+      addBtn.style.display='inline-block';
+      // update lang on new btn
+      if(currentLang==='ar') addBtn.textContent='أضف للبورتفوليو ↑';
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removePending(idx,el){
+  pendingImages[idx]=null;
+  el.remove();
+  if(!pendingImages.filter(Boolean).length) addBtn.style.display='none';
+}
+
+addBtn.addEventListener('click',()=>{
+  const grid=document.getElementById('works-grid');
+  const cats=['brand','ui','social'];
+  pendingImages.filter(Boolean).forEach((img,i)=>{
+    const item=document.createElement('div');
+    item.className='work-item third fade-in';
+    item.dataset.cat=cats[i%3];
+    item.innerHTML=`
+      <div class="work-thumb">
+        <div class="work-thumb-inner"><img src="${img.src}" alt="${img.name}"></div>
+        <div class="work-overlay">
+          <div class="overlay-label">My Work</div>
+          <div class="overlay-title">${img.name.replace(/\.[^.]+$/,'')}</div>
+        </div>
+      </div>
+      <div class="work-info">
+        <div>
+          <div class="work-title">${img.name.replace(/\.[^.]+$/,'')}</div>
+          <div class="work-meta">2025</div>
+        </div>
+        <div class="work-arrow">↗</div>
+      </div>`;
+    grid.appendChild(item);
+    setTimeout(()=>item.classList.add('visible'),100+i*80);
+  });
+  pendingImages=[];
+  previewEl.innerHTML='';
+  addBtn.style.display='none';
+  document.querySelector('#work').scrollIntoView({behavior:'smooth'});
+});
+</script>
+</body>
+</html>
